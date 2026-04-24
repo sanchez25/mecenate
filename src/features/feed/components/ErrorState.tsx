@@ -10,7 +10,7 @@ export function ErrorState({ onRetry }: Props) {
     return (
         <View style={styles.container}>
             <Image source={appImages.errorState} accessibilityLabel="Ошибка загрузки публикаций" />
-            <Text style={styles.text}>Не удалось загрузить публикациию</Text>
+            <Text style={styles.text}>Не удалось загрузить публикацию</Text>
             <Pressable style={styles.button} onPress={onRetry}>
                 <Text style={styles.buttonText}>Повторить</Text>
             </Pressable>

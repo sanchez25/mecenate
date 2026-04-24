@@ -13,3 +13,7 @@
    через Expo Go (QR-код)
    Android: нажать a
    iOS: нажать i
+
+4. Создайте `.env` файл (в качестве примера добавлен .env.example):
+
+   EXPO_PUBLIC_API_TOKEN=your_token
