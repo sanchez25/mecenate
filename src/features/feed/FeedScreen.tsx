@@ -2,15 +2,13 @@ import { ErrorState } from "@/features/feed/components/ErrorState";
 import { FeedTabs } from "@/features/feed/components/FeedTabs";
 import { PostCard } from "@/features/feed/components/PostCard";
 import { usePostsFeed } from "@/features/feed/hooks/UsePostsFeed";
-import type { FeedTierFilter } from "@/features/feed/types";
 import { colors, fontFamilies, fontSizes, spacing } from "@/shared/constants/tokens";
-import { useState } from "react";
 import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
+import { observer } from "mobx-react-lite";
+import { feedStore } from "@/features/feed/stores/feed.store";
 
-export function FeedScreen() {
-    const [tier, setTier] = useState<FeedTierFilter>("all");
-    //Берём данные из React Query
-    const postsQuery = usePostsFeed(tier);
+export const FeedScreen = observer(function FeedScreen() {
+    const postsQuery = usePostsFeed(feedStore.tier);
 
     //Склеиваем страницы в один массив
     const posts = postsQuery.data?.pages.flatMap((page) => page.data.posts) ?? [];
@@ -45,7 +43,10 @@ export function FeedScreen() {
 
   return (
     <View style={styles.container}>
-        <FeedTabs value={tier} onChange={setTier} />
+        <FeedTabs 
+            value={feedStore.tier}
+            onChange={(value) => feedStore.setTier(value)} 
+        />
         <FlatList
             data={posts}
             keyExtractor={(item) => item.id}
@@ -76,7 +77,7 @@ export function FeedScreen() {
         />
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
     container: {

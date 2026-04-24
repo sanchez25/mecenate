@@ -17,3 +17,5 @@
 4. Создайте `.env` файл (в качестве примера добавлен .env.example):
 
    EXPO_PUBLIC_API_TOKEN=your_token
+
+5. MobX используется для клиентского UI-state: выбранный фильтр ленты хранится в feedStore. Серверные данные остаются в React Query, так как это cache/server-state.
