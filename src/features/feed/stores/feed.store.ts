@@ -3,6 +3,7 @@ import type { FeedTierFilter } from "@/features/feed/types";
 
 class FeedStore {
   tier: FeedTierFilter = "all";
+  isRefreshingManually = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -10,6 +11,10 @@ class FeedStore {
 
   setTier(value: FeedTierFilter) {
     this.tier = value;
+  }
+
+  setRefreshingManually(value: boolean) {
+    this.isRefreshingManually = value;
   }
 }
 

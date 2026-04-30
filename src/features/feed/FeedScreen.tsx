@@ -25,8 +25,14 @@ export const FeedScreen = observer(function FeedScreen() {
         postsQuery.fetchNextPage();
     };
 
-    const handleRefresh = () => {
-        postsQuery.refetch();
+    const handleRefresh = async () => {
+        feedStore.setRefreshingManually(true);
+      
+        try {
+            await postsQuery.refetch();
+        } finally {
+            feedStore.setRefreshingManually(false);
+        }
     };
 
     if (showInitialLoader) {
@@ -56,7 +62,7 @@ export const FeedScreen = observer(function FeedScreen() {
             onEndReachedThreshold={0.5}
             refreshControl={
                 <RefreshControl
-                    refreshing={postsQuery.isRefetching && !postsQuery.isFetchingNextPage}
+                    refreshing={feedStore.isRefreshingManually}
                     onRefresh={handleRefresh}
                 />
             }

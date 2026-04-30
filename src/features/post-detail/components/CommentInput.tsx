@@ -2,21 +2,22 @@ import { addPostComment } from "@/api/comments.api";
 import { appIcons } from "@/shared/constants/images";
 import { colors, fontFamilies, fontSizes, radii, sizes, spacing } from "@/shared/constants/tokens";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import { Alert, Image, Pressable, StyleSheet, TextInput, View } from "react-native";
+import { observer } from "mobx-react-lite";
+import { postDetailStore } from "@/features/post-detail/stores/post-detail.store";
 
 type Props = {
     postId: string;
 };
 
-export function CommentInput({ postId }: Props) {
-    const [text, setText] = useState("");
+export const CommentInput = observer(function CommentInput({ postId }: Props) {
+    const text = postDetailStore.commentText;
     const queryClient = useQueryClient();
 
     const addCommentMutation = useMutation({
         mutationFn: (value: string) => addPostComment(postId, value),
         onSuccess: () => {
-            setText("");
+            postDetailStore.clearCommentText();
             queryClient.invalidateQueries({ queryKey: ["post-comments", postId] });
             queryClient.invalidateQueries({ queryKey: ["post-detail", postId] });
             queryClient.invalidateQueries({ queryKey: ["posts-feed"] });
@@ -30,10 +31,15 @@ export function CommentInput({ postId }: Props) {
         <View style={styles.container}>
             <TextInput
                 value={text}
-                onChangeText={setText}
+                onChangeText={(value) => postDetailStore.setCommentText(value)}
+                onFocus={() => postDetailStore.setCommentInputFocused(true)}
+                onBlur={() => postDetailStore.setCommentInputFocused(false)}
                 placeholder="Ваш комментарий"
                 placeholderTextColor="#A4AAB0"
-                style={styles.input}
+                style={[
+                    styles.input,
+                    postDetailStore.isCommentInputFocused && styles.inputFocused,
+                ]}
             />
             <Pressable
                 style={styles.button}
@@ -44,7 +50,7 @@ export function CommentInput({ postId }: Props) {
             </Pressable>
         </View>
     );
-}
+});
 
 const styles = StyleSheet.create({
     container: {
@@ -68,5 +74,8 @@ const styles = StyleSheet.create({
         right: 8,
         top: "50%",
         transform: [{ translateY: -16 }],
+    },
+    inputFocused: {
+        borderColor: colors.text.button,
     },
 });
