@@ -19,3 +19,7 @@
    EXPO_PUBLIC_API_TOKEN=your_token
 
 5. MobX используется для клиентского UI-state: выбранный фильтр ленты хранится в feedStore. Серверные данные остаются в React Query, так как это cache/server-state.
+
+6. NEW UPDATE:
+
+   6.1 WebSocket-клиент вынесен в отдельный lifecycle-aware класс с reconnect, exponential backoff, cleanup при unmount и безопасной обработкой входящих сообщений.
