@@ -23,3 +23,5 @@
 6. NEW UPDATE:
 
    6.1 WebSocket-клиент вынесен в отдельный lifecycle-aware класс с reconnect, exponential backoff, cleanup при unmount и безопасной обработкой входящих сообщений.
+
+   6.2 MobX теперь используется для клиентского UI-state: фильтр ленты, состояние ручного refresh и состояние comment input. Серверное состояние оставлено в React Query, так как оно отвечает за cache/server-state, pagination, mutations и invalidation.
